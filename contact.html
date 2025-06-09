@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ติดต่อเรา</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Sarabun', sans-serif;
+      display: flex;
+      flex-direction: column;
+      background-image: url('bg.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      backdrop-filter: blur(2px);
+    }
+
+    .navbar {
+      background-color: #000;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .nav-button {
+      background-color: white;
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      margin: 5px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: 'Sarabun', sans-serif;
+    }
+
+    button {
+      background-color: #000;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      margin-top: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .social-links {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .social-links a {
+      display: inline-block;
+      margin: 10px;
+      font-size: 18px;
+      text-decoration: none;
+      color: #000;
+      background-color: #e0e0e0;
+      padding: 10px 20px;
+      border-radius: 30px;
+      transition: background-color 0.3s;
+    }
+
+    .social-links a:hover {
+      background-color: #ccc;
+    }
+
+    footer {
+      background-color: #000;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="index.html" class="nav-button">← หน้าแรก</a>
+    <a href="cart.html" class="nav-button">🛒 ตะกร้า</a>
+  </div>
+
+  <div class="container">
+    <h1>ติดต่อเรา</h1>
+    <form id="contactForm">
+      <label for="name">ชื่อของคุณ:</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="email">อีเมล:</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="message">ข้อความ:</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">ส่งข้อความ</button>
+    </form>
+
+    <div class="social-links">
+      <h2>ติดตามหรือสอบถามผ่านช่องทางอื่น:</h2>
+      <a href="https://line.me" target="_blank"> Line</a>
+      <a href="https://facebook.com" target="_blank"> Facebook</a>
+      <a href="https://instagram.com" target="_blank"> Instagram</a>
+      <a href="tel:0888888888">📞 0888888888</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Burindrip - All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const button = this.querySelector("button");
+
+      if (!name || !email || !message) {
+        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "กำลังส่ง...";
+
+      const contactData = {
+        name,
+        email,
+        message,
+        timestamp: new Date().toLocaleString()
+      };
+
+      fetch('https://script.google.com/macros/s/AKfycby4BcJQ0ZMdWlNFbBIE4T4qKBtKuuUrdRjZJwPWyzc_9wJCzzZ_Yzvbb4lJg4pL-k1u2Q/exec', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contactData)
+      })
+      .then(response => {
+        button.disabled = false;
+        button.textContent = "ส่งข้อความ";
+        if (response.ok) {
+          alert("ส่งข้อความเรียบร้อยแล้ว!");
+          document.getElementById("contactForm").reset();
+        } else {
+          alert("เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง");
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        button.disabled = false;
+        button.textContent = "ส่งข้อความ";
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง");
+      });
+    });
+  </script>
+
+</body>
+</html>
